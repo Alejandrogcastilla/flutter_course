@@ -9,10 +9,12 @@ class ResultsScreen extends StatelessWidget {
 
   const ResultsScreen(
     {super.key, 
-    required this.chosenAnswers
+    required this.chosenAnswers,
+    required this.onRestart,
     }
   );
 
+  final void Function() onRestart;
   final List<String> chosenAnswers;
 
   List<Map<String, Object>> getSummaryData() {
@@ -22,14 +24,13 @@ class ResultsScreen extends StatelessWidget {
     for (var i = 0; i < chosenAnswers.length; i++) {
       summary.add(
         {
-          'question_index': i + 1,
+          'question_index': i,
           'question': questions[i].text,
           'correct_answer': questions[i].answers[0],
           'user_answer': chosenAnswers[i],
         },
       );
     }
-
     return summary;
 
   }
@@ -53,9 +54,16 @@ class ResultsScreen extends StatelessWidget {
             Text('You answered $numCorrectAnswers out of $numTotalQuestions questions correctly!'),
             const SizedBox(height: 30),
             QuestionsSummary(summaryData),
-            TextButton(
-              onPressed: (){}, 
-              child: Text('Restart Quiz'),)
+
+            OutlinedButton.icon(
+            onPressed: onRestart,
+            style: OutlinedButton.styleFrom(foregroundColor: Colors.white),
+            icon: const Icon(
+              Icons.restart_alt,
+              color: Colors.white,
+            ),
+            label: const Text('Restart Quiz'),
+          ),
           ],
         ),
       ),
